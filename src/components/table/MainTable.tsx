@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { flexRender, Table } from '@tanstack/react-table';
+import { flexRender, Table, ColumnDef } from '@tanstack/react-table';
 import {
   Table as ChakraTable,
   Thead,
@@ -18,18 +18,21 @@ import { FILTER_DATE } from 'types/constans';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
 import { S } from '.';
+import useTableOptions from './../../hooks/useTableOptions';
 
 interface MainTableProps {
-  table: Table<DataResponse>;
-  dataUpdatedAt: number;
+  data: DataResponse[];
+  columns: ColumnDef<DataResponse, any>[];
 }
 export const GlobalFilterContext = createContext(false);
 export const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
 
-const MainTable = ({ table, dataUpdatedAt }: MainTableProps) => {
+const MainTable = ({ data, columns }: MainTableProps) => {
   const [tableFilter, setTableFilter] = useState(initialFilter);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [isFilterReset, setIsFilterRest] = useState(false);
+
+  const table = useTableOptions({ data, columns });
 
   useEffect(() => {
     table.setPageSize(50);
@@ -44,16 +47,6 @@ const MainTable = ({ table, dataUpdatedAt }: MainTableProps) => {
 
   return (
     <TableContainer test-id='Table-Container' overflow='hidden' height='75vh'>
-      <VStack marginBottom='8' alignItems='flex-start'>
-        <Custom.TagGray>
-          <strong>Today :</strong>
-          <Text fontWeight='md'> &nbsp;{tableFilter.value}</Text>
-        </Custom.TagGray>
-        <Custom.TagGray>
-          <strong>The last sync</strong>
-          <Text fontWeight='md'>&nbsp;{new Date(dataUpdatedAt).toLocaleTimeString()}</Text>
-        </Custom.TagGray>
-      </VStack>
       <PagenationBar table={table} onResetFilterHandler={onResetFilterHandler} />
       <Divider marginTop='20px' orientation='horizontal' />
       <Box overflowY='auto' height='60vh'>
