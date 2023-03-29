@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { ColumnDef, flexRender } from '@tanstack/react-table';
+import { flexRender, Table } from '@tanstack/react-table';
 import {
   Table as ChakraTable,
   Thead,
@@ -12,34 +12,28 @@ import {
   Divider,
   Th,
   VStack,
-  HStack,
 } from '@chakra-ui/react';
-import useTable from 'hooks/useTable';
-import * as S from 'components/styles';
-import * as Custom from 'components/common/CustomBtn';
-import ColumnsHeaderFilter from 'components/columns/ColumnsHeaderFilter';
-import PagenationBar from 'components/columns/PagenationBar';
+import { HeadersSort, PagenationBar } from 'components/tools';
 import { FILTER_DATE } from 'types/constans';
 import { DataResponse } from 'types';
+import { Custom } from 'components/common';
+import { S } from '.';
+
 interface MainTableProps {
-  data: DataResponse[];
-  columns: ColumnDef<DataResponse, any>[];
+  table: Table<DataResponse>;
   dataUpdatedAt: number;
 }
 export const GlobalFilterContext = createContext(false);
 export const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
 
-const MainTable = ({ data, columns, dataUpdatedAt }: MainTableProps) => {
+const MainTable = ({ table, dataUpdatedAt }: MainTableProps) => {
   const [tableFilter, setTableFilter] = useState(initialFilter);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [isFilterReset, setIsFilterRest] = useState(false);
 
-  const table = useTable({ data, columns });
-
   useEffect(() => {
     table.setPageSize(50);
     table.setColumnFilters([tableFilter]);
-    table.setColumnVisibility(columnVisibility);
   }, []);
 
   const onResetFilterHandler = () => {
@@ -70,7 +64,7 @@ const MainTable = ({ data, columns, dataUpdatedAt }: MainTableProps) => {
                 {table.getHeaderGroups().map(headerGroup => (
                   <Tr key={headerGroup.id}>
                     <Th>Index</Th>
-                    <ColumnsHeaderFilter headers={headerGroup.headers} table={table} />
+                    <HeadersSort headers={headerGroup.headers} table={table} />
                   </Tr>
                 ))}
               </Thead>

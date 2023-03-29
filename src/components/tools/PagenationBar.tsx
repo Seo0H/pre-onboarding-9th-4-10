@@ -1,13 +1,8 @@
 import { Table } from '@tanstack/react-table';
-import { Select, HStack, Box, Tag, VStack, Button } from '@chakra-ui/react';
-import {
-  LeftArrowOnceIcon,
-  LeftArrowTwice,
-  RightArrowTwiceIcon,
-  RightArrowOnceIcon,
-} from 'components/common/CreateSVGIcon';
-import * as Custom from 'components/common/CustomBtn';
+import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
+import { CustomIcon } from 'components/common';
 import { DataResponse } from 'types';
+import { Custom } from 'components/common';
 
 const PagenationBar = ({
   table,
@@ -33,13 +28,13 @@ const PagenationBar = ({
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
-              icon={<LeftArrowTwice minW='50px' />}
+              icon={<CustomIcon.LeftArrowTwice minW='50px' />}
             />
             <Custom.IconBtn
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
-              icon={<LeftArrowOnceIcon />}
+              icon={<CustomIcon.LeftArrowOnce />}
             />
             <strong>
               {pageIndex + 1} / {pageCount}
@@ -48,13 +43,13 @@ const PagenationBar = ({
               onClick={() => onNextPageHandler()}
               disabled={!table.getCanNextPage()}
               aria-label=''
-              icon={<RightArrowOnceIcon />}
+              icon={<CustomIcon.RightArrowOnce />}
             />
             <Custom.IconBtn
               onClick={() => table.setPageIndex(maxPageIdx)}
               disabled={!table.getCanNextPage()}
               aria-label=''
-              icon={<RightArrowTwiceIcon minW='50px' />}
+              icon={<CustomIcon.RightArrowTwice minW='50px' />}
             />
           </HStack>
           <HStack>

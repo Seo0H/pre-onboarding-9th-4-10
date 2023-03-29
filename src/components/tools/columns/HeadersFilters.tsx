@@ -11,9 +11,9 @@ import {
   MenuOptionGroup,
   MenuItemOption,
 } from '@chakra-ui/react';
-import * as Custom from 'components/common/CustomBtn';
-import { GlobalFilterContext } from 'components/MainTable';
+import { GlobalFilterContext } from 'components/table/MainTable';
 import { DataResponse } from 'types';
+import { Custom } from 'components/common';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
@@ -21,7 +21,7 @@ const FILTER_MENU_TYPE = {
   FALSE: 'false',
 } as const;
 
-const SearchMenu = ({
+const HeadersFilters = ({
   header,
   column,
   table,
@@ -146,4 +146,4 @@ const SearchMenu = ({
   );
 };
 
-export default SearchMenu;
+export default HeadersFilters;

@@ -11,7 +11,7 @@ import {
 import { DataResponse } from 'types';
 import { ColumnDef } from '@tanstack/react-table';
 
-function useTable({
+function useTableOptions({
   data,
   columns,
 }: {
@@ -36,4 +36,4 @@ function useTable({
   return table;
 }
 
-export default useTable;
+export default useTableOptions;

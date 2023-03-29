@@ -1,16 +1,16 @@
-import * as Custom from 'components/common/CustomBtn';
+import { Custom } from 'components/common';
 import { flexRender, Header, Table } from '@tanstack/react-table';
 import { Th } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { DataResponse } from 'types';
-import SearchMenu from './SearchMenu';
+import HeadersFilters from './HeadersFilters';
 
 interface TableProps {
   headers: Header<DataResponse, unknown>[];
   table: Table<DataResponse>;
 }
 
-const ColumnsHeaderFilter = ({ headers, table }: TableProps) => {
+const HeadersSort = ({ headers, table }: TableProps) => {
   return (
     <>
       {headers.map(
@@ -33,7 +33,7 @@ const ColumnsHeaderFilter = ({ headers, table }: TableProps) => {
                       }[header.column.getIsSorted() as string] ?? ' -'}
                     </Custom.TextBtn>
                   ) : header.id === 'customer_name' || header.id === 'status' ? (
-                    <SearchMenu header={header} column={header.column} table={table} />
+                    <HeadersFilters header={header} column={header.column} table={table} />
                   ) : (
                     <Custom.TextBtn>
                       {flexRender(header.column.columnDef.header, header.getContext())}
@@ -48,4 +48,4 @@ const ColumnsHeaderFilter = ({ headers, table }: TableProps) => {
   );
 };
 
-export default ColumnsHeaderFilter;
+export default HeadersSort;
