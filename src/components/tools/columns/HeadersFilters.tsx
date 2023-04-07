@@ -11,9 +11,9 @@ import {
   MenuOptionGroup,
   MenuItemOption,
 } from '@chakra-ui/react';
-import { GlobalFilterContext } from 'components/table/MainTable';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
+import { GlobalFilterContext } from 'pages/MainPage';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
