@@ -1,10 +1,9 @@
 import { Text, VStack } from '@chakra-ui/react';
-import { Custom } from 'components/common';
-import { FILTER_DATE } from 'types/constans';
 import { useQuery } from '@tanstack/react-query';
+import { Custom } from 'components/common';
+import { initialFilter } from 'pages/MainPage';
 
-const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
-const InfoContainor = () => {
+const InfoContainer = () => {
   const { dataUpdatedAt } = useQuery({
     queryKey: ['orderList'],
     refetchInterval: 5000,
@@ -25,4 +24,4 @@ const InfoContainor = () => {
   );
 };
 
-export default InfoContainor;
+export default InfoContainer;

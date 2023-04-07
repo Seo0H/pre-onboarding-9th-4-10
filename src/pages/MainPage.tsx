@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from 'react';
-import useColums from 'hooks/useColums';
+import { useQuery } from '@tanstack/react-query';
 import LayoutWrapper from 'components/layout/LayoutWrapper';
 import MainTable from 'components/table/MainTable';
 import { getOrderListDataApi } from 'utils/api';
-import { useQuery } from '@tanstack/react-query';
-import InfoContainor from 'components/tools/InfoContainor';
+import InfoContainer from 'components/tools/InfoContainer';
+import useColums from 'hooks/useColums';
 import useTableOptions from 'hooks/useTableOptions';
 import { PagenationBar } from 'components';
 import { FILTER_DATE } from 'types/constans';
@@ -23,12 +23,7 @@ const MainPage = () => {
   const columns = useColums();
   const table = useTableOptions({ data, columns });
 
-  useEffect(() => {
-    table.setPageSize(50);
-    table.setColumnFilters([initialFilter]);
-  }, []);
-
-  const onResetFilterHandler = () => {
+  const onResetFilterUIHandler = () => {
     table.setColumnFilters([initialFilter]);
     setIsFilterRest(true);
     setTimeout(() => setIsFilterRest(false), 1000);
@@ -36,8 +31,8 @@ const MainPage = () => {
 
   return (
     <LayoutWrapper>
-      <InfoContainor />
-      <PagenationBar table={table} onResetFilterHandler={onResetFilterHandler} />
+      <InfoContainer />
+      <PagenationBar table={table} onResetFilterUIHandler={onResetFilterUIHandler} />
       <GlobalFilterContext.Provider value={isFilterReset}>
         <MainTable {...{ table }} />
       </GlobalFilterContext.Provider>

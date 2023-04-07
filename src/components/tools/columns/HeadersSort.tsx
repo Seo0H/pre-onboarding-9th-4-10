@@ -16,7 +16,7 @@ const HeadersSort = ({ headers, table }: TableProps) => {
       {headers.map(
         header =>
           header.id !== 'date' && (
-            <Th key={header.id}>
+            <Th key={'header-key' + header.id}>
               {header.isPlaceholder ? null : (
                 <>
                   {header.id === 'id' || header.id === 'time' ? (

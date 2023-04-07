@@ -94,7 +94,7 @@ const HeadersFilters = ({
             {sortedUniqueValues
               .slice(0, sortedUniqueValues.length - 1)
               .map((value: typeof firstValue) => (
-                <option value={value} key={'option' + value} />
+                <option value={value} key={'option-key' + value} />
               ))}
           </datalist>
           <form onSubmit={e => searchBtnHandler(e)}>

@@ -8,7 +8,7 @@ const CustomSkeleton = () => {
         <Skeleton height='80px' bg='blue.500' color='white' marginBottom='1vh' />
         <Skeleton height='20px' bg='blue.500' color='white' />
         {[...Array(10)].map((e, idx) => (
-          <Skeleton key={idx} height='60px' bg='blue.500' color='white' />
+          <Skeleton key={'skeleton-key' + idx} height='60px' bg='blue.500' color='white' />
         ))}
       </Stack>
     </LayoutWrapper>

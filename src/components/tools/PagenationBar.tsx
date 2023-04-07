@@ -6,10 +6,10 @@ import { Custom } from 'components/common';
 
 const PagenationBar = ({
   table,
-  onResetFilterHandler,
+  onResetFilterUIHandler,
 }: {
   table: Table<DataResponse>;
-  onResetFilterHandler: () => void;
+  onResetFilterUIHandler: () => void;
 }) => {
   const { pageIndex } = table.getState().pagination;
   const pageCount = table.getPageCount();
@@ -72,7 +72,7 @@ const PagenationBar = ({
         <Box flex='1' />
         <HStack>
           <Box flex='1' />
-          <Button onClick={() => onResetFilterHandler()} color='gray.500' fontWeight='bold'>
+          <Button onClick={() => onResetFilterUIHandler()} color='gray.500' fontWeight='bold'>
             모든 필터 초기화
           </Button>
         </HStack>
@@ -85,8 +85,8 @@ const PagenationBar = ({
             }}
           >
             {/* Visible Row Count Option */}
-            {[50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
+            {[5, 10, 50].map(pageSize => (
+              <option key={'pageSize-key' + pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
             ))}
