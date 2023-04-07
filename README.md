@@ -12,7 +12,7 @@
 
 ### **🖱️ 배포 링크**
 
-https://wanted-fe-week4-3yiz93zou-seo0h.vercel.app/
+[wanted-fe-week4-refactor](https://wanted-fe-week4.vercel.app/)
 
 ### **목표**
 
