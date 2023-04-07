@@ -1,20 +1,15 @@
 import { Table } from '@tanstack/react-table';
-import { Select, HStack, Box, Tag, VStack, Button } from '@chakra-ui/react';
-import {
-  LeftArrowOnceIcon,
-  LeftArrowTwice,
-  RightArrowTwiceIcon,
-  RightArrowOnceIcon,
-} from 'components/common/CreateSVGIcon';
-import * as Custom from 'components/common/CustomBtn';
+import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
+import { CustomIcon } from 'components/common';
 import { DataResponse } from 'types';
+import { Custom } from 'components/common';
 
 const PagenationBar = ({
   table,
-  onResetFilterHandler,
+  onResetFilterUIHandler,
 }: {
   table: Table<DataResponse>;
-  onResetFilterHandler: () => void;
+  onResetFilterUIHandler: () => void;
 }) => {
   const { pageIndex } = table.getState().pagination;
   const pageCount = table.getPageCount();
@@ -33,13 +28,13 @@ const PagenationBar = ({
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
-              icon={<LeftArrowTwice minW='50px' />}
+              icon={<CustomIcon.LeftArrowTwice minW='50px' />}
             />
             <Custom.IconBtn
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
-              icon={<LeftArrowOnceIcon />}
+              icon={<CustomIcon.LeftArrowOnce />}
             />
             <strong>
               {pageIndex + 1} / {pageCount}
@@ -48,13 +43,13 @@ const PagenationBar = ({
               onClick={() => onNextPageHandler()}
               disabled={!table.getCanNextPage()}
               aria-label=''
-              icon={<RightArrowOnceIcon />}
+              icon={<CustomIcon.RightArrowOnce />}
             />
             <Custom.IconBtn
               onClick={() => table.setPageIndex(maxPageIdx)}
               disabled={!table.getCanNextPage()}
               aria-label=''
-              icon={<RightArrowTwiceIcon minW='50px' />}
+              icon={<CustomIcon.RightArrowTwice minW='50px' />}
             />
           </HStack>
           <HStack>
@@ -77,7 +72,7 @@ const PagenationBar = ({
         <Box flex='1' />
         <HStack>
           <Box flex='1' />
-          <Button onClick={() => onResetFilterHandler()} color='gray.500' fontWeight='bold'>
+          <Button onClick={() => onResetFilterUIHandler()} color='gray.500' fontWeight='bold'>
             모든 필터 초기화
           </Button>
         </HStack>
@@ -90,8 +85,8 @@ const PagenationBar = ({
             }}
           >
             {/* Visible Row Count Option */}
-            {[50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
+            {[5, 10, 50].map(pageSize => (
+              <option key={'pageSize-key' + pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
             ))}

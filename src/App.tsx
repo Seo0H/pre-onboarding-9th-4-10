@@ -5,21 +5,25 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from 'styles';
 import { theme } from 'styles';
+import { Suspense } from 'react';
+import { CustomSkeleton } from 'components/common';
 
 // Create a client
 export const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 5000 } },
+  defaultOptions: { queries: { staleTime: 5000, suspense: true } },
 });
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={theme}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={true} />
-        <GlobalStyle />
-      </ChakraProvider>
-    </QueryClientProvider>
+    <ChakraProvider theme={theme}>
+      <Suspense fallback={<CustomSkeleton />}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={true} />
+          <GlobalStyle />
+        </QueryClientProvider>
+      </Suspense>
+    </ChakraProvider>
   );
 }
 

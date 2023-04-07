@@ -1,6 +1,6 @@
 import { createIcon } from '@chakra-ui/icons';
 
-export const LeftArrowOnceIcon = createIcon({
+export const LeftArrowOnce = createIcon({
   displayName: 'LeftArrowOnceIcon',
   viewBox: '-3 1 20 18',
   path: <path d='M-3.93403e-07 9L12 -9.60337e-07L12 18L-3.93403e-07 9Z' fill='#838383' />,
@@ -17,13 +17,13 @@ export const LeftArrowTwice = createIcon({
   ),
 });
 
-export const RightArrowOnceIcon = createIcon({
+export const RightArrowOnce = createIcon({
   displayName: 'RightArrowOnceIcon',
   viewBox: '-5 1 20 18',
   path: <path d='M12 9L-1.66869e-07 -5.24537e-07L-9.53674e-07 18L12 9Z' fill='#838383' />,
 });
 
-export const RightArrowTwiceIcon = createIcon({
+export const RightArrowTwice = createIcon({
   displayName: 'LeftArrowTwiceIcon',
   viewBox: '3 1 20 18',
   path: (

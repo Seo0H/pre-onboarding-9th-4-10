@@ -1,4 +1,4 @@
-import { Box, BoxProps, Center, Flex } from '@chakra-ui/react';
+import { Box, BoxProps, Center, Flex, TableContainer } from '@chakra-ui/react';
 
 const LayoutWrapper = (props: BoxProps) => {
   return (
@@ -15,7 +15,9 @@ const LayoutWrapper = (props: BoxProps) => {
           padding='30px 20px'
           {...props}
         >
-          {props.children}
+          <TableContainer test-id='Table-Container' overflow='hidden' height='75vh' {...props}>
+            {props.children}
+          </TableContainer>
         </Box>
       </Center>
     </Flex>

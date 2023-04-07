@@ -10,8 +10,10 @@ import {
 } from '@tanstack/react-table';
 import { DataResponse } from 'types';
 import { ColumnDef } from '@tanstack/react-table';
+import { initialFilter } from 'pages/MainPage';
+import { useEffect } from 'react';
 
-function useTable({
+function useTableOptions({
   data,
   columns,
 }: {
@@ -33,7 +35,12 @@ function useTable({
     // debugColumns: true,
   });
 
+  useEffect(() => {
+    table.setPageSize(50);
+    table.setColumnFilters([initialFilter]);
+  }, []);
+
   return table;
 }
 
-export default useTable;
+export default useTableOptions;

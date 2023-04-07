@@ -12,4 +12,8 @@ export const StyleAlineTd = styled.div`
   th {
     text-align: center;
   }
+
+  Tr {
+    height: '20px';
+  }
 `;

@@ -11,9 +11,9 @@ import {
   MenuOptionGroup,
   MenuItemOption,
 } from '@chakra-ui/react';
-import * as Custom from 'components/common/CustomBtn';
-import { GlobalFilterContext } from 'components/MainTable';
 import { DataResponse } from 'types';
+import { Custom } from 'components/common';
+import { GlobalFilterContext } from 'pages/MainPage';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
@@ -21,7 +21,7 @@ const FILTER_MENU_TYPE = {
   FALSE: 'false',
 } as const;
 
-const SearchMenu = ({
+const HeadersFilters = ({
   header,
   column,
   table,
@@ -94,7 +94,7 @@ const SearchMenu = ({
             {sortedUniqueValues
               .slice(0, sortedUniqueValues.length - 1)
               .map((value: typeof firstValue) => (
-                <option value={value} key={'option' + value} />
+                <option value={value} key={'option-key' + value} />
               ))}
           </datalist>
           <form onSubmit={e => searchBtnHandler(e)}>
@@ -146,4 +146,4 @@ const SearchMenu = ({
   );
 };
 
-export default SearchMenu;
+export default HeadersFilters;
