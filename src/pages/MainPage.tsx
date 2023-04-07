@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import useOrderList from 'hooks/useOrderList';
 import useColums from 'hooks/useColums';
 import LayoutWrapper from 'components/layout/LayoutWrapper';
@@ -9,14 +9,12 @@ import { useQuery } from '@tanstack/react-query';
 import InfoContainor from 'components/tools/InfoContainor';
 
 const MainPage = () => {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['orderList'],
     queryFn: getOrderListDataApi,
-    // refetchInterval: 5000,
+    suspense: true,
   });
   const columns = useColums();
-
-  if (isLoading || !data) return <CustomSkeleton />;
 
   return (
     <LayoutWrapper>
