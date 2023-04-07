@@ -18,7 +18,7 @@ https://wanted-fe-week4-3yiz93zou-seo0h.vercel.app/
 
 1. **팀에서 '모범 사례' 로 선정된 팀원의 코드의 장점 적용**
 - [X] 폴더구조, 폴더명, 변수명 가독성 향상 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/2
-- [ ] 컴포넌트 분리 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/3
+- [x] 컴포넌트 분리 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/3 https://github.com/Seo0H/wanted-FE-adminPage-refactor/pull/6
 - [ ] 하드코딩 수정
 - [ ] 테스트 코드 구현
 - [ ] 불필요 코드 정리
@@ -34,6 +34,6 @@ https://wanted-fe-week4-3yiz93zou-seo0h.vercel.app/
 - React
 - TypeScript
 - Axios
-- @tanstack/React-Table
-- @tanstack/React-Query
+- tanstack/React-Table
+- tanstack/React-Query
 
