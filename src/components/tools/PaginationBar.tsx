@@ -3,21 +3,47 @@ import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
 import { CustomIcon } from 'components/common';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-const PagenationBar = ({
+const PAGE_BTN_NAME = {
+  FIRST_PAGE: 'first-page',
+  LAST_PAGE: 'last-page',
+  NEXT_PAGE: 'next-page',
+  BEFORE_PAGE: 'before-page',
+} as const;
+
+const PaginationBar = ({
   table,
   onResetFilterUIHandler,
 }: {
   table: Table<DataResponse>;
   onResetFilterUIHandler: () => void;
 }) => {
+  const [query, setQuery] = useSearchParams();
   const { pageIndex } = table.getState().pagination;
   const pageCount = table.getPageCount();
-  const maxPageIdx = pageCount - 1;
+  const pageNumber = () => Number(query.get('page')) - 1;
 
-  const onNextPageHandler = () => {
-    pageIndex < maxPageIdx ? table.nextPage() : table.setPageIndex(maxPageIdx);
+  useEffect(() => table.setPageIndex(pageNumber), [setQuery]);
+
+  const pageNationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name;
+    const page = 'page=';
+    const pageNum =
+      Number(query.get('page')) < pageCount
+        ? Number(query.get('page')) >= 0
+          ? Number(query.get('page'))
+          : 0
+        : pageCount - 1;
+
+    if (name === PAGE_BTN_NAME.FIRST_PAGE) setQuery(page + '1');
+    else if (name === PAGE_BTN_NAME.LAST_PAGE) setQuery(page + pageCount);
+    else if (name === PAGE_BTN_NAME.NEXT_PAGE) setQuery(page + (pageNum + 1));
+    else if (name === PAGE_BTN_NAME.BEFORE_PAGE) setQuery(page + (pageNum - 1));
   };
+
+  const pagenationIdxBtnHandler = (idx: number) => setQuery('page=' + (idx + 1));
 
   return (
     <>
@@ -25,13 +51,15 @@ const PagenationBar = ({
         <VStack align='center'>
           <HStack gap='1'>
             <Custom.IconBtn
-              onClick={() => table.setPageIndex(0)}
+              name={PAGE_BTN_NAME.FIRST_PAGE}
+              onClick={e => pageNationHandler(e)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
               icon={<CustomIcon.LeftArrowTwice minW='50px' />}
             />
             <Custom.IconBtn
-              onClick={() => table.previousPage()}
+              name={PAGE_BTN_NAME.BEFORE_PAGE}
+              onClick={e => pageNationHandler(e)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
               icon={<CustomIcon.LeftArrowOnce />}
@@ -40,13 +68,15 @@ const PagenationBar = ({
               {pageIndex + 1} / {pageCount}
             </strong>
             <Custom.IconBtn
-              onClick={() => onNextPageHandler()}
+              name={PAGE_BTN_NAME.NEXT_PAGE}
+              onClick={e => pageNationHandler(e)}
               disabled={!table.getCanNextPage()}
               aria-label=''
               icon={<CustomIcon.RightArrowOnce />}
             />
             <Custom.IconBtn
-              onClick={() => table.setPageIndex(maxPageIdx)}
+              name={PAGE_BTN_NAME.LAST_PAGE}
+              onClick={e => pageNationHandler(e)}
               disabled={!table.getCanNextPage()}
               aria-label=''
               icon={<CustomIcon.RightArrowTwice minW='50px' />}
@@ -58,8 +88,9 @@ const PagenationBar = ({
                 idx < 6 && (
                   <Custom.TagGray
                     fontWeight='bold'
-                    key={idx}
-                    onClick={() => table.setPageIndex(idx)}
+                    key={'Pagenation-num' + idx}
+                    // onClick={() => table.setPageIndex(idx)}
+                    onClick={() => pagenationIdxBtnHandler(idx)}
                     cursor='pointer'
                     bg={pageIndex === idx ? 'gray.300' : 'gray.100'}
                   >
@@ -97,4 +128,4 @@ const PagenationBar = ({
   );
 };
 
-export default PagenationBar;
+export default PaginationBar;

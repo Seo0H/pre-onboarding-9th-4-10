@@ -8,6 +8,7 @@ import useColums from 'hooks/useColums';
 import useTableOptions from 'hooks/useTableOptions';
 import { PagenationBar } from 'components';
 import { FILTER_DATE } from 'types/constans';
+import { useSearchParams } from 'react-router-dom';
 
 export const GlobalFilterContext = createContext(false);
 export const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
@@ -18,8 +19,8 @@ const MainPage = () => {
     queryFn: getOrderListDataApi,
     suspense: true,
   });
+  const [query] = useSearchParams();
   const [isFilterReset, setIsFilterRest] = useState(false);
-
   const columns = useColums();
   const table = useTableOptions({ data, columns });
 
