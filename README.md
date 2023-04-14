@@ -19,10 +19,11 @@
 1. **팀에서 '모범 사례' 로 선정된 팀원의 코드의 장점 적용**
 - [X] 폴더구조, 폴더명, 변수명 가독성 향상 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/2
 - [x] 컴포넌트 분리 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/3 https://github.com/Seo0H/wanted-FE-adminPage-refactor/pull/6
+- [ ] 필터링 쿼리스트링 적용 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/7
+- [ ] 테스트 코드 구현 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/8
 - [ ] 하드코딩 수정
-- [ ] 테스트 코드 구현
 - [ ] 불필요 코드 정리
-- [ ] 필터링 쿼리스트링 적용
+
 
 2. **원티드 프리온보딩 인턴십에서 교육받은 FE 세션 강의 내용 적용**
 - [ ] 관심사 분리
