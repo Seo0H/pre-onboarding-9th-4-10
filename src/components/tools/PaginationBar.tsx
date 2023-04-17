@@ -6,7 +6,7 @@ import { Custom } from 'components/common';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const PAGE_BTN_NAME = {
+const BTN_NAME = {
   FIRST_PAGE: 'first-page',
   LAST_PAGE: 'last-page',
   NEXT_PAGE: 'next-page',
@@ -21,26 +21,21 @@ const PaginationBar = ({
   onResetFilterUIHandler: () => void;
 }) => {
   const [query, setQuery] = useSearchParams();
-  const { pageIndex } = table.getState().pagination;
-  const pageCount = table.getPageCount();
-  const pageNumber = () => Number(query.get('page')) - 1;
+  const tablePageSize = table.getPageCount();
+  let queryPageIdx = Number(query.get('page')) - 1;
+  if (queryPageIdx >= tablePageSize) queryPageIdx = tablePageSize - 1;
+  if (queryPageIdx < 0) queryPageIdx = 0;
 
-  useEffect(() => table.setPageIndex(pageNumber), [setQuery]);
+  useEffect(() => table.setPageIndex(() => queryPageIdx - 1), [setQuery]);
 
   const pageNationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name;
     const page = 'page=';
-    const pageNum =
-      Number(query.get('page')) < pageCount
-        ? Number(query.get('page')) >= 0
-          ? Number(query.get('page'))
-          : 0
-        : pageCount - 1;
-
-    if (name === PAGE_BTN_NAME.FIRST_PAGE) setQuery(page + '1');
-    else if (name === PAGE_BTN_NAME.LAST_PAGE) setQuery(page + pageCount);
-    else if (name === PAGE_BTN_NAME.NEXT_PAGE) setQuery(page + (pageNum + 1));
-    else if (name === PAGE_BTN_NAME.BEFORE_PAGE) setQuery(page + (pageNum - 1));
+    const pageNum = queryPageIdx < tablePageSize && queryPageIdx >= 0 ? queryPageIdx + 1 : 0;
+    name === BTN_NAME.FIRST_PAGE && setQuery(page + '1');
+    name === BTN_NAME.LAST_PAGE && setQuery(page + tablePageSize);
+    name === BTN_NAME.NEXT_PAGE && setQuery(page + (pageNum + 1));
+    name === BTN_NAME.BEFORE_PAGE && setQuery(page + (pageNum - 1));
   };
 
   const pagenationIdxBtnHandler = (idx: number) => setQuery('page=' + (idx + 1));
@@ -51,31 +46,31 @@ const PaginationBar = ({
         <VStack align='center'>
           <HStack gap='1'>
             <Custom.IconBtn
-              name={PAGE_BTN_NAME.FIRST_PAGE}
+              name={BTN_NAME.FIRST_PAGE}
               onClick={e => pageNationHandler(e)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
               icon={<CustomIcon.LeftArrowTwice minW='50px' />}
             />
             <Custom.IconBtn
-              name={PAGE_BTN_NAME.BEFORE_PAGE}
+              name={BTN_NAME.BEFORE_PAGE}
               onClick={e => pageNationHandler(e)}
               disabled={!table.getCanPreviousPage()}
               aria-label=''
               icon={<CustomIcon.LeftArrowOnce />}
             />
             <strong>
-              {pageIndex + 1} / {pageCount}
+              {queryPageIdx + 1} / {tablePageSize}
             </strong>
             <Custom.IconBtn
-              name={PAGE_BTN_NAME.NEXT_PAGE}
+              name={BTN_NAME.NEXT_PAGE}
               onClick={e => pageNationHandler(e)}
               disabled={!table.getCanNextPage()}
               aria-label=''
               icon={<CustomIcon.RightArrowOnce />}
             />
             <Custom.IconBtn
-              name={PAGE_BTN_NAME.LAST_PAGE}
+              name={BTN_NAME.LAST_PAGE}
               onClick={e => pageNationHandler(e)}
               disabled={!table.getCanNextPage()}
               aria-label=''
@@ -83,16 +78,15 @@ const PaginationBar = ({
             />
           </HStack>
           <HStack>
-            {[...new Array(pageCount)].map(
+            {Array.from({ length: tablePageSize }, _ => 0).map(
               (e, idx) =>
                 idx < 6 && (
                   <Custom.TagGray
                     fontWeight='bold'
                     key={'Pagenation-num' + idx}
-                    // onClick={() => table.setPageIndex(idx)}
                     onClick={() => pagenationIdxBtnHandler(idx)}
                     cursor='pointer'
-                    bg={pageIndex === idx ? 'gray.300' : 'gray.100'}
+                    bg={queryPageIdx === idx ? 'gray.300' : 'gray.100'}
                   >
                     {idx + 1}
                   </Custom.TagGray>
