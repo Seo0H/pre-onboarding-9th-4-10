@@ -22,16 +22,18 @@ const PaginationBar = ({
 }) => {
   const [query, setQuery] = useSearchParams();
   const tablePageSize = table.getPageCount();
-  let queryPageIdx = Number(query.get('page')) - 1;
-  if (queryPageIdx >= tablePageSize) queryPageIdx = tablePageSize - 1;
-  if (queryPageIdx < 0) queryPageIdx = 0;
+  const queryPageIdx = Number(query.get('page')) - 1;
+  const page = 'page=';
 
-  useEffect(() => table.setPageIndex(() => queryPageIdx - 1), [setQuery]);
+  useEffect(() => {
+    if (queryPageIdx >= tablePageSize) setQuery(page + tablePageSize);
+    if (queryPageIdx < 1) setQuery(page + 1);
+    table.setPageIndex(queryPageIdx);
+  }, [setQuery]);
 
   const pageNationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name;
-    const page = 'page=';
-    const pageNum = queryPageIdx < tablePageSize && queryPageIdx >= 0 ? queryPageIdx + 1 : 0;
+    const pageNum = queryPageIdx + 1;
     name === BTN_NAME.FIRST_PAGE && setQuery(page + '1');
     name === BTN_NAME.LAST_PAGE && setQuery(page + tablePageSize);
     name === BTN_NAME.NEXT_PAGE && setQuery(page + (pageNum + 1));

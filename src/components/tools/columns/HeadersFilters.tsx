@@ -14,6 +14,7 @@ import {
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
 import { GlobalFilterContext } from 'pages/MainPage';
+import { useSearchParams } from 'react-router-dom';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
@@ -30,6 +31,7 @@ const HeadersFilters = ({
   column: Column<any, unknown>;
   table: Table<DataResponse>;
 }) => {
+  const [query, setQuery] = useSearchParams();
   // Colum의 Row 속성 검색 필터링을 위해 사용
   const [searchValue, setSearchValue] = useState<string>();
 
@@ -43,6 +45,7 @@ const HeadersFilters = ({
   const isFilterGlobalReset = useContext(GlobalFilterContext);
 
   useEffect(() => {
+    // table.setColumnFilters([{ id: 'customer_id', value: query.get('search') }]);
     column.setFilterValue('');
     setSelectedValue(FILTER_MENU_TYPE.ALL);
   }, [isFilterGlobalReset]);
@@ -54,8 +57,10 @@ const HeadersFilters = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    column.setFilterValue(searchValue);
-    setSearchValue('');
+    const serach = 'search=';
+    setQuery(serach + searchValue);
+    // column.setFilterValue(searchValue);
+    // setSearchValue('');
   };
 
   const onFilterMackinit = () => {
