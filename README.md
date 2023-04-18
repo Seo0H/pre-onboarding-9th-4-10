@@ -27,7 +27,7 @@
 
 2. **원티드 프리온보딩 인턴십에서 교육받은 FE 세션 강의 내용 적용**
 - [ ] 관심사 분리
-- [ ] Import 순서 정리
+- [x] Import 순서 정리 https://github.com/Seo0H/wanted-FE-adminPage-refactor/issues/9
 - [ ] 선언적 코드
 
 ### **사용 기술 스택**
