@@ -1,5 +1,5 @@
 import { useMemo, useState, FormEvent, useEffect, useContext } from 'react';
-import { Table, Column, Header } from '@tanstack/react-table';
+
 import { SearchIcon } from '@chakra-ui/icons';
 import {
   Menu,
@@ -11,9 +11,11 @@ import {
   MenuOptionGroup,
   MenuItemOption,
 } from '@chakra-ui/react';
-import { DataResponse } from 'types';
+import { Table, Column, Header } from '@tanstack/react-table';
+
 import { Custom } from 'components/common';
 import { GlobalFilterContext } from 'pages/MainPage';
+import { DataResponse } from 'types';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',

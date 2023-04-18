@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import { createColumnHelper } from '@tanstack/react-table';
-import { DataResponse } from 'types';
+
 import { Tag } from '@chakra-ui/react';
+import { createColumnHelper } from '@tanstack/react-table';
+
+import { DataResponse } from 'types';
 
 function useColums() {
   const columnHelper = createColumnHelper<DataResponse>();

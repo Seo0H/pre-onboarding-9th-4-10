@@ -7,7 +7,9 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -33,11 +35,34 @@
     "eqeqeq": "error",
     "no-unused-vars": "warn",
     "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "groups": [
+          ["builtin", "external"],
+          ["internal", "parent", "index"],
+          ["sibling", "type", "object"]
+        ],
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
   },
   "settings": {
     "react": {
       "version": "detect"
-    }
+    },
+    "import/resolver": { "typescript": "true", "node": "true" }
   }
 }

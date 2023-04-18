@@ -1,8 +1,8 @@
-import { Table } from '@tanstack/react-table';
 import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
-import { CustomIcon } from 'components/common';
+import { Table } from '@tanstack/react-table';
+
+import { CustomIcon, Custom } from 'components/common';
 import { DataResponse } from 'types';
-import { Custom } from 'components/common';
 
 const PagenationBar = ({
   table,

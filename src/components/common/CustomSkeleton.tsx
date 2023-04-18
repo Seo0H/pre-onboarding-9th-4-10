@@ -1,4 +1,5 @@
 import { Skeleton, Stack } from '@chakra-ui/react';
+
 import LayoutWrapper from 'components/layout/LayoutWrapper';
 
 const CustomSkeleton = () => {

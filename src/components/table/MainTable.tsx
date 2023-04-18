@@ -1,8 +1,9 @@
-import { flexRender, Table } from '@tanstack/react-table';
 import { Table as ChakraTable, Thead, Tbody, Tr, Td, Box, Divider, Th } from '@chakra-ui/react';
+import { flexRender, Table } from '@tanstack/react-table';
+
+import { S } from '.';
 import { HeadersSort } from 'components/tools';
 import { DataResponse } from 'types';
-import { S } from '.';
 
 const MainTable = ({ table }: { table: Table<DataResponse> }) => {
   return (

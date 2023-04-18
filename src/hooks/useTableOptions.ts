@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import {
   getCoreRowModel,
   getFacetedMinMaxValues,
@@ -7,11 +9,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  ColumnDef,
 } from '@tanstack/react-table';
-import { DataResponse } from 'types';
-import { ColumnDef } from '@tanstack/react-table';
+
 import { initialFilter } from 'pages/MainPage';
-import { useEffect } from 'react';
+import { DataResponse } from 'types';
 
 function useTableOptions({
   data,

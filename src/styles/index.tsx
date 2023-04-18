@@ -1,5 +1,5 @@
-import { Global, css } from '@emotion/react';
 import { extendTheme } from '@chakra-ui/react';
+import { Global, css } from '@emotion/react';
 
 const style = css`
   @font-face {
