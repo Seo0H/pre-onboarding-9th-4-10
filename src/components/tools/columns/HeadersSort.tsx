@@ -1,8 +1,10 @@
-import { Custom } from 'components/common';
-import { flexRender, Header, Table } from '@tanstack/react-table';
-import { Th } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { Th } from '@chakra-ui/react';
+import { flexRender, Header, Table } from '@tanstack/react-table';
+
+import { Custom } from 'components/common';
 import { DataResponse } from 'types';
+
 import HeadersFilters from './HeadersFilters';
 
 interface TableProps {

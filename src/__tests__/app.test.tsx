@@ -1,6 +1,7 @@
-import App from 'App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
+
+import App from 'App';
 import MainPage from 'pages/MainPage';
 
 jest.mock('utils/api/index');
