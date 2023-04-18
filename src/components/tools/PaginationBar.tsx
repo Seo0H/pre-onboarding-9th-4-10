@@ -4,7 +4,7 @@ import { CustomIcon } from 'components/common';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import useFilter from 'hooks/useFilters';
 
 const BTN_NAME = {
   FIRST_PAGE: 'first-page',
@@ -13,6 +13,8 @@ const BTN_NAME = {
   BEFORE_PAGE: 'before-page',
 } as const;
 
+const PAGE = 'page' as const;
+
 const PaginationBar = ({
   table,
   onResetFilterUIHandler,
@@ -20,27 +22,22 @@ const PaginationBar = ({
   table: Table<DataResponse>;
   onResetFilterUIHandler: () => void;
 }) => {
-  const [query, setQuery] = useSearchParams();
+  const { state, updateState: setSearchParams } = useFilter();
   const tablePageSize = table.getPageCount();
-  const queryPageIdx = Number(query.get('page')) - 1;
-  const page = 'page=';
+  const currentPageIdx = Number(state.page) - 1;
 
-  useEffect(() => {
-    if (queryPageIdx >= tablePageSize) setQuery(page + tablePageSize);
-    if (queryPageIdx < 1) setQuery(page + 1);
-    table.setPageIndex(queryPageIdx);
-  }, [setQuery]);
+  useEffect(() => table.setPageIndex(currentPageIdx), [setSearchParams]);
 
   const pageNationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name;
-    const pageNum = queryPageIdx + 1;
-    name === BTN_NAME.FIRST_PAGE && setQuery(page + '1');
-    name === BTN_NAME.LAST_PAGE && setQuery(page + tablePageSize);
-    name === BTN_NAME.NEXT_PAGE && setQuery(page + (pageNum + 1));
-    name === BTN_NAME.BEFORE_PAGE && setQuery(page + (pageNum - 1));
+    const pageNum = currentPageIdx + 1;
+    name === BTN_NAME.FIRST_PAGE && setSearchParams(PAGE, '1');
+    name === BTN_NAME.LAST_PAGE && setSearchParams(PAGE, tablePageSize);
+    name === BTN_NAME.NEXT_PAGE && pageNum < tablePageSize && setSearchParams(PAGE, pageNum + 1);
+    name === BTN_NAME.BEFORE_PAGE && pageNum > 1 && setSearchParams(PAGE, pageNum - 1);
   };
 
-  const pagenationIdxBtnHandler = (idx: number) => setQuery('page=' + (idx + 1));
+  const pagenationIdxBtnHandler = (idx: number) => setSearchParams(PAGE, idx + 1);
 
   return (
     <>
@@ -62,7 +59,7 @@ const PaginationBar = ({
               icon={<CustomIcon.LeftArrowOnce />}
             />
             <strong>
-              {queryPageIdx + 1} / {tablePageSize}
+              {currentPageIdx + 1} / {tablePageSize}
             </strong>
             <Custom.IconBtn
               name={BTN_NAME.NEXT_PAGE}
@@ -82,13 +79,13 @@ const PaginationBar = ({
           <HStack>
             {Array.from({ length: tablePageSize }, _ => 0).map(
               (e, idx) =>
-                idx < 6 && (
+                idx < tablePageSize && (
                   <Custom.TagGray
                     fontWeight='bold'
                     key={'Pagenation-num' + idx}
                     onClick={() => pagenationIdxBtnHandler(idx)}
                     cursor='pointer'
-                    bg={queryPageIdx === idx ? 'gray.300' : 'gray.100'}
+                    bg={currentPageIdx === idx ? 'gray.300' : 'gray.100'}
                   >
                     {idx + 1}
                   </Custom.TagGray>

@@ -13,8 +13,9 @@ import {
 } from '@chakra-ui/react';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
-import { GlobalFilterContext } from 'pages/MainPage';
+import { GlobalFilterContext, initialFilter } from 'pages/MainPage';
 import { useSearchParams } from 'react-router-dom';
+import useFilter from 'hooks/useFilters';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
@@ -31,9 +32,10 @@ const HeadersFilters = ({
   column: Column<any, unknown>;
   table: Table<DataResponse>;
 }) => {
-  const [query, setQuery] = useSearchParams();
+  // const [query, setSearachParams] = useSearchParams();
+  const { state, updateState: setSearachParams } = useFilter();
   // Colum의 Row 속성 검색 필터링을 위해 사용
-  const [searchValue, setSearchValue] = useState<string>();
+  const [searchValue, setSearchValue] = useState<string>('');
 
   // Colum의 Row 속성이 선택 필터링을 위해 사용
   const [selectedValue, setSelectedValue] = useState<string>(FILTER_MENU_TYPE.ALL);
@@ -45,7 +47,10 @@ const HeadersFilters = ({
   const isFilterGlobalReset = useContext(GlobalFilterContext);
 
   useEffect(() => {
-    // table.setColumnFilters([{ id: 'customer_id', value: query.get('search') }]);
+    table.setColumnFilters([{ id: 'customer_name', value: state.search }, initialFilter]);
+  }, []);
+
+  useEffect(() => {
     column.setFilterValue('');
     setSelectedValue(FILTER_MENU_TYPE.ALL);
   }, [isFilterGlobalReset]);
@@ -57,8 +62,8 @@ const HeadersFilters = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const serach = 'search=';
-    setQuery(serach + searchValue);
+    const serach = 'search';
+    setSearachParams(serach, searchValue);
     // column.setFilterValue(searchValue);
     // setSearchValue('');
   };
