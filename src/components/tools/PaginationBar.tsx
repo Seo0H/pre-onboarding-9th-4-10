@@ -3,7 +3,7 @@ import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
 import { CustomIcon } from 'components/common';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useFilter from 'hooks/useFilters';
 
 const BTN_NAME = {
@@ -23,10 +23,17 @@ const PaginationBar = ({
   onResetFilterUIHandler: () => void;
 }) => {
   const { state, updateState: setSearchParams } = useFilter();
+  const [isUpdate, setIsUpdate] = useState(true);
   const tablePageSize = table.getPageCount();
   const currentPageIdx = Number(state.page) - 1;
 
-  useEffect(() => table.setPageIndex(currentPageIdx), [setSearchParams]);
+  if (Number(state.page) > tablePageSize) setSearchParams(PAGE, tablePageSize);
+  if (Number(state.page) <= 0) setSearchParams(PAGE, 1);
+
+  useEffect(() => {
+    table.setPageIndex(currentPageIdx);
+    setIsUpdate(false);
+  }, [isUpdate]);
 
   const pageNationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name;
@@ -35,9 +42,13 @@ const PaginationBar = ({
     name === BTN_NAME.LAST_PAGE && setSearchParams(PAGE, tablePageSize);
     name === BTN_NAME.NEXT_PAGE && pageNum < tablePageSize && setSearchParams(PAGE, pageNum + 1);
     name === BTN_NAME.BEFORE_PAGE && pageNum > 1 && setSearchParams(PAGE, pageNum - 1);
+    setIsUpdate(true);
   };
 
-  const pagenationIdxBtnHandler = (idx: number) => setSearchParams(PAGE, idx + 1);
+  const pagenationIdxBtnHandler = (idx: number) => {
+    setSearchParams(PAGE, idx + 1);
+    setIsUpdate(true);
+  };
 
   return (
     <>

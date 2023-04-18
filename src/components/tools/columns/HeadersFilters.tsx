@@ -14,7 +14,6 @@ import {
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
 import { GlobalFilterContext, initialFilter } from 'pages/MainPage';
-import { useSearchParams } from 'react-router-dom';
 import useFilter from 'hooks/useFilters';
 
 const FILTER_MENU_TYPE = {
@@ -22,6 +21,8 @@ const FILTER_MENU_TYPE = {
   TRUE: 'true',
   FALSE: 'false',
 } as const;
+
+const SEARCH = 'search' as const;
 
 const HeadersFilters = ({
   header,
@@ -34,8 +35,9 @@ const HeadersFilters = ({
 }) => {
   // const [query, setSearachParams] = useSearchParams();
   const { state, updateState: setSearachParams } = useFilter();
+  const [isUpdate, setIsUpdate] = useState(true);
   // Colum의 Row 속성 검색 필터링을 위해 사용
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>(state.search);
 
   // Colum의 Row 속성이 선택 필터링을 위해 사용
   const [selectedValue, setSelectedValue] = useState<string>(FILTER_MENU_TYPE.ALL);
@@ -48,7 +50,8 @@ const HeadersFilters = ({
 
   useEffect(() => {
     table.setColumnFilters([{ id: 'customer_name', value: state.search }, initialFilter]);
-  }, []);
+    setIsUpdate(false);
+  }, [isUpdate]);
 
   useEffect(() => {
     column.setFilterValue('');
@@ -62,15 +65,14 @@ const HeadersFilters = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const serach = 'search';
-    setSearachParams(serach, searchValue);
-    // column.setFilterValue(searchValue);
-    // setSearchValue('');
+    setSearachParams(SEARCH, searchValue);
+    setIsUpdate(true);
   };
 
   const onFilterMackinit = () => {
+    setSearachParams(SEARCH, '');
     setSearchValue('');
-    column.setFilterValue('');
+    setIsUpdate(true);
   };
 
   const onMenuChangeHandler = (val: string | string[]) => {

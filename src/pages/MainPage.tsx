@@ -8,7 +8,6 @@ import useColums from 'hooks/useColums';
 import useTableOptions from 'hooks/useTableOptions';
 import { PagenationBar } from 'components';
 import { FILTER_DATE } from 'types/constans';
-import useFilter from 'hooks/useFilters';
 
 export const GlobalFilterContext = createContext(false);
 export const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
