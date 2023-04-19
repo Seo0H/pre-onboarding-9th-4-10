@@ -13,7 +13,7 @@ const BTN_NAME = {
   BEFORE_PAGE: 'before-page',
 } as const;
 
-const PAGE = 'page' as const;
+const PAGE = 'page';
 
 const PaginationBar = ({
   table,

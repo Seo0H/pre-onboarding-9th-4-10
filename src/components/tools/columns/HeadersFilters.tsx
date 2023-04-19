@@ -1,4 +1,4 @@
-import { useMemo, useState, FormEvent, useEffect, useContext } from 'react';
+import { useMemo, useState, FormEvent, useEffect, useContext, Children } from 'react';
 import { Table, Column, Header } from '@tanstack/react-table';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
@@ -10,6 +10,8 @@ import {
   HStack,
   MenuOptionGroup,
   MenuItemOption,
+  MenuItemProps,
+  MenuItemOptionProps,
 } from '@chakra-ui/react';
 import { DataResponse } from 'types';
 import { Custom } from 'components/common';
@@ -22,7 +24,7 @@ const FILTER_MENU_TYPE = {
   FALSE: 'false',
 } as const;
 
-const SEARCH = 'search' as const;
+const SEARCH_NAME = 'search_name';
 
 const HeadersFilters = ({
   header,
@@ -37,19 +39,17 @@ const HeadersFilters = ({
   const { state, updateState: setSearachParams } = useFilter();
   const [isUpdate, setIsUpdate] = useState(true);
   // Colum의 Row 속성 검색 필터링을 위해 사용
-  const [searchValue, setSearchValue] = useState<string>(state.search);
+  const [searchValue, setSearchValue] = useState<string>(state.search_name);
 
   // Colum의 Row 속성이 선택 필터링을 위해 사용
   const [selectedValue, setSelectedValue] = useState<string>(FILTER_MENU_TYPE.ALL);
-
-  // Col의 첫번째 row인자를 통해 해당 Col의 속성 파악
-  const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
+  const firstValueType = typeof table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
 
   // Filter 전체 초기화 시 부분 적용 필터 시각적 초기화를 위한 변수
   const isFilterGlobalReset = useContext(GlobalFilterContext);
 
   useEffect(() => {
-    table.setColumnFilters([{ id: 'customer_name', value: state.search }, initialFilter]);
+    table.setColumnFilters([{ id: 'customer_name', value: state.search_name }, initialFilter]);
     setIsUpdate(false);
   }, [isUpdate]);
 
@@ -65,17 +65,18 @@ const HeadersFilters = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearachParams(SEARCH, searchValue);
+    setSearachParams(SEARCH_NAME, searchValue);
     setIsUpdate(true);
   };
 
   const onFilterMackinit = () => {
-    setSearachParams(SEARCH, '');
+    setSearachParams(SEARCH_NAME, '');
     setSearchValue('');
     setIsUpdate(true);
   };
 
   const onMenuChangeHandler = (val: string | string[]) => {
+    console.log(val);
     if (typeof val === 'object') return;
     val === FILTER_MENU_TYPE.TRUE
       ? column.setFilterValue(true)
@@ -83,6 +84,12 @@ const HeadersFilters = ({
       ? column.setFilterValue(false)
       : column.setFilterValue('');
     setSelectedValue(val);
+  };
+
+  const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(e.currentTarget.name);
+    const name = e.currentTarget.name;
+    // name === BTN_NAME.FIRST_PAGE && setSearachParams(PAGE, '1');/
   };
 
   return (
@@ -100,12 +107,12 @@ const HeadersFilters = ({
         />
       </Custom.TextBtn>
 
-      {typeof firstValue === 'string' ? (
+      {firstValueType === 'string' ? (
         <MenuList padding='3'>
           <datalist id={column.id + 'list'}>
             {sortedUniqueValues
               .slice(0, sortedUniqueValues.length - 1)
-              .map((value: typeof firstValue) => (
+              .map((value: typeof firstValueType) => (
                 <option value={value} key={'option-key' + value} />
               ))}
           </datalist>
@@ -133,24 +140,17 @@ const HeadersFilters = ({
             value={selectedValue}
           >
             {sortedUniqueValues.slice(0, 5000).map((value: string) => (
-              <MenuItemOption
-                minH='35px'
-                fontSize='md'
-                fontWeight='bold'
-                value={value.toString()}
+              <CustomMenuItemOption
+                onClick={e => onClickHandler(e)}
+                name={value.toString()}
                 key={'status key' + value.toString()}
               >
                 {value.toString()}
-              </MenuItemOption>
+              </CustomMenuItemOption>
             ))}
-            <MenuItemOption
-              minH='35px'
-              fontSize='md'
-              fontWeight='bold'
-              value={FILTER_MENU_TYPE.ALL}
-            >
+            <CustomMenuItemOption minH='35px' name={FILTER_MENU_TYPE.ALL}>
               ALL
-            </MenuItemOption>
+            </CustomMenuItemOption>
           </MenuOptionGroup>
         </MenuList>
       )}
@@ -159,3 +159,11 @@ const HeadersFilters = ({
 };
 
 export default HeadersFilters;
+
+const CustomMenuItemOption = (props: MenuItemOptionProps) => {
+  return (
+    <MenuItemOption minH='35px' fontSize='md' fontWeight='bold' {...props}>
+      {props.children}
+    </MenuItemOption>
+  );
+};
