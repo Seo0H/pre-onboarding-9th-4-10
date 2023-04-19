@@ -5,15 +5,19 @@ function useFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [state, setState] = useState(() => {
     return {
-      search: searchParams.get('search') ?? '',
+      search_name: searchParams.get('search_name') ?? '',
       page: searchParams.get('page') ?? '1',
+      filterOrder: searchParams.get('filter_order') ?? '',
     };
   });
 
   useEffect(() => {
-    if (searchParams.get('search') !== state.search || searchParams.get('page') !== state.page) {
+    if (
+      searchParams.get('search_name') !== state.search_name ||
+      searchParams.get('page') !== state.page
+    ) {
       setSearchParams({
-        search: state.search,
+        search_name: state.search_name,
         page: state.page,
       });
     }
