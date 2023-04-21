@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
 import { Table } from '@tanstack/react-table';
 
-import { CustomIcon, Custom, Custom } from 'components/common';
-import useFilter from 'hooks/useFilters';
+import { CustomIcon, Custom } from 'components/common';
+import useParamsFilter from 'hooks/useParamsFilter';
 import { DataResponse } from 'types';
 
 const BTN_NAME = {
@@ -23,7 +23,7 @@ const PaginationBar = ({
   table: Table<DataResponse>;
   onResetFilterUIHandler: () => void;
 }) => {
-  const { state, updateState: setSearchParams } = useFilter();
+  const { state, updateState: setSearchParams } = useParamsFilter();
   const [isUpdate, setIsUpdate] = useState(true);
   const tablePageSize = table.getPageCount();
   const currentPageIdx = Number(state.page) - 1;
