@@ -29,8 +29,8 @@ function useColums() {
       columnHelper.accessor('status', {
         header: '주문 처리 상태',
         cell: info => (
-          <Tag size='md' colorScheme={info.getValue() ? 'green' : 'red'}>
-            {info.getValue().toString()}
+          <Tag size='md' colorScheme={info.getValue() === 'true' ? 'green' : 'red'}>
+            {info.getValue() === 'true' ? '완료' : '진행중'}
           </Tag>
         ),
       }),
