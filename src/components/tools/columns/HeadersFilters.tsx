@@ -10,14 +10,14 @@ import {
   HStack,
   MenuOptionGroup,
   MenuItemOption,
-  MenuItemProps,
   MenuItemOptionProps,
 } from '@chakra-ui/react';
-import { Table, Column, Header, Table, Column, Header } from '@tanstack/react-table';
+import { Table, Column, Header } from '@tanstack/react-table';
 
 import { Custom } from 'components/common';
-import useFilter from 'hooks/useFilters';
+import useParamsFilter, { PARAMS } from 'hooks/useParamsFilter';
 import { GlobalFilterContext, initialFilter } from 'pages/MainPage';
+import { DataResponse } from 'types';
 
 const FILTER_MENU_TYPE = {
   ALL: 'ALL',
@@ -25,7 +25,7 @@ const FILTER_MENU_TYPE = {
   FALSE: 'false',
 } as const;
 
-const SEARCH_NAME = 'search_name';
+type KEY = keyof typeof FILTER_MENU_TYPE;
 
 const HeadersFilters = ({
   header,
@@ -36,27 +36,23 @@ const HeadersFilters = ({
   column: Column<any, unknown>;
   table: Table<DataResponse>;
 }) => {
-  // const [query, setSearachParams] = useSearchParams();
-  const { state, updateState: setSearachParams } = useFilter();
-  const [isUpdate, setIsUpdate] = useState(true);
-  // Colum의 Row 속성 검색 필터링을 위해 사용
-  const [searchValue, setSearchValue] = useState<string>(state.search_name);
-
-  // Colum의 Row 속성이 선택 필터링을 위해 사용
-  const [selectedValue, setSelectedValue] = useState<string>(FILTER_MENU_TYPE.ALL);
+  const { state, updateState: setSearachParams } = useParamsFilter();
+  const [isFilterUpdate, setIsFilterUpdate] = useState(true);
+  const [searchValue, setSearchValue] = useState(state.search_name);
+  const [filteringValue, setFilteringValue] = useState<(typeof FILTER_MENU_TYPE)[KEY]>(
+    FILTER_MENU_TYPE.ALL,
+  );
   const firstValueType = typeof table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
-
-  // Filter 전체 초기화 시 부분 적용 필터 시각적 초기화를 위한 변수
   const isFilterGlobalReset = useContext(GlobalFilterContext);
 
   useEffect(() => {
     table.setColumnFilters([{ id: 'customer_name', value: state.search_name }, initialFilter]);
-    setIsUpdate(false);
-  }, [isUpdate]);
+    setIsFilterUpdate(() => false);
+  }, [isFilterUpdate]);
 
   useEffect(() => {
     column.setFilterValue('');
-    setSelectedValue(FILTER_MENU_TYPE.ALL);
+    setFilteringValue(FILTER_MENU_TYPE.ALL);
   }, [isFilterGlobalReset]);
 
   const sortedUniqueValues = useMemo(
@@ -66,31 +62,23 @@ const HeadersFilters = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearachParams(SEARCH_NAME, searchValue);
-    setIsUpdate(true);
+    setSearachParams(PARAMS.SEARCH_NAME, searchValue);
+    setIsFilterUpdate(true);
   };
 
   const onFilterMackinit = () => {
-    setSearachParams(SEARCH_NAME, '');
+    setSearachParams(PARAMS.SEARCH_NAME, '');
     setSearchValue('');
-    setIsUpdate(true);
+    setIsFilterUpdate(true);
   };
 
-  const onMenuChangeHandler = (val: string | string[]) => {
-    console.log(val);
-    if (typeof val === 'object') return;
-    val === FILTER_MENU_TYPE.TRUE
-      ? column.setFilterValue(true)
-      : val === FILTER_MENU_TYPE.FALSE
-      ? column.setFilterValue(false)
-      : column.setFilterValue('');
-    setSelectedValue(val);
-  };
-
-  const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(e.currentTarget.name);
-    const name = e.currentTarget.name;
-    // name === BTN_NAME.FIRST_PAGE && setSearachParams(PAGE, '1');/
+  const onClickFilterHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name as (typeof FILTER_MENU_TYPE)[KEY];
+    name === FILTER_MENU_TYPE.ALL && setSearachParams(PARAMS.FILTER_ORDER, 'ALL');
+    name === FILTER_MENU_TYPE.TRUE && setSearachParams(PARAMS.FILTER_ORDER, 'true');
+    name === FILTER_MENU_TYPE.FALSE && setSearachParams(PARAMS.FILTER_ORDER, 'false');
+    setFilteringValue(name);
+    setIsFilterUpdate(true);
   };
 
   return (
@@ -108,7 +96,7 @@ const HeadersFilters = ({
         />
       </Custom.TextBtn>
 
-      {firstValueType === 'string' ? (
+      {column.id === 'customer_name' ? (
         <MenuList padding='3'>
           <datalist id={column.id + 'list'}>
             {sortedUniqueValues
@@ -134,22 +122,21 @@ const HeadersFilters = ({
         </MenuList>
       ) : (
         <MenuList padding='3'>
-          <MenuOptionGroup
-            defaultValue={selectedValue}
-            type='radio'
-            onChange={val => onMenuChangeHandler(val)}
-            value={selectedValue}
-          >
-            {sortedUniqueValues.slice(0, 5000).map((value: string) => (
+          <MenuOptionGroup defaultValue={filteringValue} type='radio' value={filteringValue}>
+            {sortedUniqueValues.slice(0, 5000).map(value => (
               <CustomMenuItemOption
-                onClick={e => onClickHandler(e)}
+                onClick={e => onClickFilterHandler(e)}
                 name={value.toString()}
                 key={'status key' + value.toString()}
               >
                 {value.toString()}
               </CustomMenuItemOption>
             ))}
-            <CustomMenuItemOption minH='35px' name={FILTER_MENU_TYPE.ALL}>
+            <CustomMenuItemOption
+              minH='35px'
+              name={FILTER_MENU_TYPE.ALL}
+              onClick={e => onClickFilterHandler(e)}
+            >
               ALL
             </CustomMenuItemOption>
           </MenuOptionGroup>
