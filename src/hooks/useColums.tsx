@@ -5,6 +5,11 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { DataResponse } from 'types';
 
+export interface DataResponseId extends DataResponse {
+  time: string;
+  date: string;
+}
+
 function useColums() {
   const columnHelper = createColumnHelper<DataResponse>();
 

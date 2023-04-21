@@ -1,30 +1,40 @@
 import { useEffect, useState } from 'react';
 
+import { ColumnFiltersState } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
+
+import { initialFilter } from 'pages/MainPage';
 
 function useParamsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [state, setState] = useState(() => {
     return {
-      search_name: searchParams.get('search_name') ?? '',
+      customer_name: searchParams.get('customer_name') ?? '',
       page: searchParams.get('page') ?? '1',
-      filter_order: searchParams.get('filter_order') ?? 'ALL',
+      status: searchParams.get('status') ?? 'ALL',
     };
   });
+  //[{id, val} , .. ]
+  const [filterState, setFilterState] = useState<ColumnFiltersState>([
+    { id: 'status', value: '' },
+    { id: 'customer_name', value: '' },
+    initialFilter,
+  ]);
 
   useEffect(() => {
     if (
-      searchParams.get('search_name') !== state.search_name ||
+      searchParams.get('customer_name') !== state.customer_name ||
       searchParams.get('page') !== state.page ||
-      searchParams.get('filter_order') !== state.filter_order
+      searchParams.get('status') !== state.status
     ) {
       setSearchParams({
-        search_name: state.search_name,
+        ...state,
+        customer_name: state.customer_name,
         page: state.page,
-        filter_order: state.filter_order,
+        status: state.status,
       });
     }
-  }, [state]);
+  }, [state, filterState]);
 
   const updateState = (key: string, value: string | number) => {
     if (typeof value === 'number') value = String(value);
@@ -32,15 +42,31 @@ function useParamsFilter() {
       const newState = { ...prevState, [key]: value };
       return newState;
     });
+
+    setFilterState(prevFilter => {
+      if (value === 'ALL') value = '';
+      return prevFilter.map(filter => {
+        if (filter.id === key) return { id: key, value: value };
+        return { ...filter };
+      });
+    });
   };
 
-  return { state, updateState };
+  const reSeatStatae = () => {
+    const resetState = { customer_name: '', page: '1', status: 'ALL' };
+    setState(resetState);
+    setFilterState(prevFilter => {
+      return prevFilter.map(({ id }) => ({ id, value: '' }));
+    });
+  };
+
+  return { state, filterState, updateState, reSeatStatae };
 }
 
 export default useParamsFilter;
 
 export const PARAMS = {
-  SEARCH_NAME: 'search_name',
+  CUSTOMER_NAME: 'customer_name',
   PAGE: 'page',
-  FILTER_ORDER: 'filter_order',
+  STATUS: 'status',
 } as const;

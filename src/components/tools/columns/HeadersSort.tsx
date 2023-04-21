@@ -1,16 +1,22 @@
+import { useId } from 'react';
+
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { Th } from '@chakra-ui/react';
 import { flexRender, Header, Table } from '@tanstack/react-table';
 
 import { Custom } from 'components/common';
-import { DataResponse } from 'types';
 
-import HeadersFilters from './HeadersFilters';
+import NameSearch from './NameSearch';
+import StatusFilter from './StatusFilter';
+import type { DataResponseId } from 'hooks/useColums';
+import type { DataResponse } from 'types';
 
-interface TableProps {
+export interface TableProps {
   headers: Header<DataResponse, unknown>[];
   table: Table<DataResponse>;
 }
+
+type KeyOfDataRes = keyof DataResponseId;
 
 const HeadersSort = ({ headers, table }: TableProps) => {
   return (
@@ -34,8 +40,10 @@ const HeadersSort = ({ headers, table }: TableProps) => {
                         desc: <ChevronDownIcon />,
                       }[header.column.getIsSorted() as string] ?? ' -'}
                     </Custom.TextBtn>
-                  ) : header.id === 'customer_name' || header.id === 'status' ? (
-                    <HeadersFilters header={header} column={header.column} table={table} />
+                  ) : header.id === 'customer_name' ? (
+                    <NameSearch header={header} column={header.column} table={table} />
+                  ) : header.id === 'status' ? (
+                    <StatusFilter header={header} column={header.column} table={table} />
                   ) : (
                     <Custom.TextBtn>
                       {flexRender(header.column.columnDef.header, header.getContext())}
