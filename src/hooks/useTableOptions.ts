@@ -12,7 +12,7 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 
-import { initialFilter } from 'pages/MainPage';
+import { initialFilter } from 'constant';
 import { DataResponse } from 'types';
 
 function useTableOptions({
@@ -39,7 +39,7 @@ function useTableOptions({
 
   useEffect(() => {
     table.setPageSize(50);
-    table.setColumnFilters([initialFilter]);
+    table.setColumnFilters(initialFilter);
   }, []);
 
   return table;

@@ -44,3 +44,11 @@ export const TagGray = (props: TagProps) => (
     {props.children}
   </Tag>
 );
+
+export const MenuItemOptionBlock = (props: MenuItemOptionProps) => {
+  return (
+    <MenuItemOption minH='35px' fontSize='md' fontWeight='bold' {...props}>
+      {props.children}
+    </MenuItemOption>
+  );
+};
