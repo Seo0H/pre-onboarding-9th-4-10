@@ -94,7 +94,7 @@ const PaginationBar = ({
                 idx < tablePageSize && (
                   <Custom.TagGray
                     fontWeight='bold'
-                    key={'Pagenation-num' + idx}
+                    key={'Pagination-num' + idx}
                     onClick={() => pagenationIdxBtnHandler(idx)}
                     cursor='pointer'
                     bg={currentPageIdx === idx ? 'gray.300' : 'gray.100'}

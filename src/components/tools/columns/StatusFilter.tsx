@@ -6,7 +6,6 @@ import { Column, Header, Table } from '@tanstack/react-table';
 
 import { Custom } from 'components/common';
 import useParamsFilter, { PARAMS } from 'hooks/useParamsFilter';
-import { initialFilter } from 'pages/MainPage';
 import { DataResponse } from 'types';
 
 const FILTER_MENU_TYPE = {

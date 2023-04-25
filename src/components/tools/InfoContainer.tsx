@@ -2,7 +2,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
 import { Custom } from 'components/common';
-import { initialFilter } from 'pages/MainPage';
+import { initialFilter } from 'constant';
 
 const InfoContainer = () => {
   const { dataUpdatedAt } = useQuery({

@@ -12,7 +12,7 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 
-import { initialFilter } from 'pages/MainPage';
+import { initialFilter } from 'constant';
 import { DataResponse } from 'types';
 
 function useTableOptions({

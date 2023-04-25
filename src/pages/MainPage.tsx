@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 
-import { PagenationBar } from 'components';
+import { PaginationBar } from 'components';
 import LayoutWrapper from 'components/layout/LayoutWrapper';
 import MainTable from 'components/table/MainTable';
 import InfoContainer from 'components/tools/InfoContainer';
@@ -8,10 +8,8 @@ import useColums from 'hooks/useColums';
 import useOrderList from 'hooks/useOrderList';
 import useParamsFilter from 'hooks/useParamsFilter';
 import useTableOptions from 'hooks/useTableOptions';
-import { FILTER_DATE } from 'types/constans';
 
 export const GlobalFilterContext = createContext(false);
-export const initialFilter = { id: 'date', value: FILTER_DATE.TODAY } as const;
 
 const MainPage = () => {
   const data = useOrderList();
@@ -21,7 +19,7 @@ const MainPage = () => {
   const { filterState, reSeatStatae } = useParamsFilter();
 
   const onResetFilterUIHandler = () => {
-    table.setColumnFilters([initialFilter]);
+    table.setColumnFilters(filterState);
     reSeatStatae();
     setIsFilterRest(true);
     setTimeout(() => setIsFilterRest(false), 1000);
@@ -34,7 +32,7 @@ const MainPage = () => {
   return (
     <LayoutWrapper>
       <InfoContainer />
-      <PagenationBar table={table} onResetFilterUIHandler={onResetFilterUIHandler} />
+      <PaginationBar table={table} onResetFilterUIHandler={onResetFilterUIHandler} />
       <GlobalFilterContext.Provider value={isFilterReset}>
         <MainTable {...{ table }} />
       </GlobalFilterContext.Provider>

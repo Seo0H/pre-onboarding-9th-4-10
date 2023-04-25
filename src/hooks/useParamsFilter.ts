@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
 
-import { initialFilter } from 'pages/MainPage';
+import { initialFilter } from 'constant';
 
 function useParamsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
