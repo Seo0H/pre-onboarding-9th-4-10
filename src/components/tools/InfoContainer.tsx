@@ -2,7 +2,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
 import { Custom } from 'components/common';
-import { initialFilter } from 'constant';
+import { FILTER_DATE } from 'constant';
 
 const InfoContainer = () => {
   const { dataUpdatedAt } = useQuery({
@@ -14,7 +14,7 @@ const InfoContainer = () => {
       <VStack marginBottom='8' alignItems='flex-start'>
         <Custom.TagGray>
           <strong>Today :</strong>
-          <Text fontWeight='md'> &nbsp;{initialFilter.value}</Text>
+          <Text fontWeight='md'> &nbsp;{FILTER_DATE.TODAY}</Text>
         </Custom.TagGray>
         <Custom.TagGray>
           <strong>The last sync</strong>

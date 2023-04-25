@@ -15,11 +15,7 @@ function useParamsFilter() {
     };
   });
   //[{id, val} , .. ]
-  const [filterState, setFilterState] = useState<ColumnFiltersState>([
-    { id: 'status', value: '' },
-    { id: 'customer_name', value: '' },
-    initialFilter,
-  ]);
+  const [filterState, setFilterState] = useState<ColumnFiltersState>(initialFilter);
 
   useEffect(() => {
     if (
@@ -55,9 +51,7 @@ function useParamsFilter() {
   const reSeatStatae = () => {
     const resetState = { customer_name: '', page: '1', status: 'ALL' };
     setState(resetState);
-    setFilterState(prevFilter => {
-      return prevFilter.map(({ id }) => ({ id, value: '' }));
-    });
+    setFilterState(initialFilter);
   };
 
   return { state, filterState, updateState, reSeatStatae };

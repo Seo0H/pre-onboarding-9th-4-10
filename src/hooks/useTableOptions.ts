@@ -39,7 +39,7 @@ function useTableOptions({
 
   useEffect(() => {
     table.setPageSize(50);
-    table.setColumnFilters([initialFilter]);
+    table.setColumnFilters(initialFilter);
   }, []);
 
   return table;
