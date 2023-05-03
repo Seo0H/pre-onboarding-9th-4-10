@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
 
-import { initialFilter } from 'constant';
+import { FILTER_DATE, initialFilter } from 'constant';
+import { CUSTOMER_NAME, FILTER_MENU_TYPE, PAGE, STATUS } from 'constant/paramsKey';
 
 function useParamsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,8 +15,18 @@ function useParamsFilter() {
       status: searchParams.get('status') ?? 'ALL',
     };
   });
-  //[{id, val} , .. ]
-  const [filterState, setFilterState] = useState<ColumnFiltersState>(initialFilter);
+
+  const [filterState, setFilterState] = useState<ColumnFiltersState>([
+    {
+      id: STATUS,
+      value:
+        searchParams.get('status') === 'ALL' || !searchParams.get(STATUS)
+          ? ''
+          : searchParams.get('status'),
+    },
+    { id: CUSTOMER_NAME, value: searchParams.get('customer_name') || '' },
+    { id: 'date', value: FILTER_DATE.TODAY },
+  ]);
 
   useEffect(() => {
     if (
@@ -30,37 +41,35 @@ function useParamsFilter() {
         status: state.status,
       });
     }
-  }, [state, filterState]);
+  }, [state]);
+  type KeyType = typeof PAGE | typeof STATUS | typeof CUSTOMER_NAME;
+  type StatusType = (typeof FILTER_MENU_TYPE)[keyof typeof FILTER_MENU_TYPE];
 
-  const updateState = (key: string, value: string | number) => {
-    if (typeof value === 'number') value = String(value);
+  const updateState = (key: KeyType, updateVal: string | number) => {
+    if (typeof updateVal === 'number') updateVal = String(updateVal);
+
     setState(prevState => {
-      const newState = { ...prevState, [key]: value };
+      const newState = { ...prevState, [key]: updateVal };
       return newState;
     });
 
+    // TO-DO: 기존 FILTER는 유지하며, 변경된 필터만 추가...
     setFilterState(prevFilter => {
-      if (value === 'ALL') value = '';
+      if (updateVal === FILTER_MENU_TYPE.ALL) updateVal = '';
       return prevFilter.map(filter => {
-        if (filter.id === key) return { id: key, value: value };
+        if (filter.id === key) return { id: filter.id, value: updateVal };
         return { ...filter };
       });
     });
   };
 
-  const reSeatStatae = () => {
-    const resetState = { customer_name: '', page: '1', status: 'ALL' };
-    setState(resetState);
-    setFilterState(initialFilter);
-  };
+  function resetState() {
+    // const resetState = { customer_name: '', page: '1', status: 'ALL' };
+    setSearchParams({ customer_name: '', page: '1', status: 'ALL' });
+    setFilterState(() => initialFilter);
+  }
 
-  return { state, filterState, updateState, reSeatStatae };
+  return { state, filterState, updateState, resetState };
 }
 
 export default useParamsFilter;
-
-export const PARAMS = {
-  CUSTOMER_NAME: 'customer_name',
-  PAGE: 'page',
-  STATUS: 'status',
-} as const;

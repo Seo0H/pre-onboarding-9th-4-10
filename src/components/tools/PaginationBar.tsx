@@ -4,6 +4,7 @@ import { Select, HStack, Box, VStack, Button } from '@chakra-ui/react';
 import { Table } from '@tanstack/react-table';
 
 import { CustomIcon, Custom } from 'components/common';
+import { PAGE } from 'constant/paramsKey';
 import useParamsFilter from 'hooks/useParamsFilter';
 import { DataResponse } from 'types';
 
@@ -13,9 +14,6 @@ const BTN_NAME = {
   NEXT_PAGE: 'next-page',
   BEFORE_PAGE: 'before-page',
 } as const;
-
-const PAGE = 'page';
-
 const PaginationBar = ({
   table,
   onResetFilterUIHandler,

@@ -5,14 +5,9 @@ import { IconButton, Menu, MenuButton, MenuList, MenuOptionGroup } from '@chakra
 import { Column, Header, Table } from '@tanstack/react-table';
 
 import { Custom } from 'components/common';
-import useParamsFilter, { PARAMS } from 'hooks/useParamsFilter';
+import { FILTER_MENU_TYPE, STATUS } from 'constant/paramsKey';
+import useParamsFilter from 'hooks/useParamsFilter';
 import { DataResponse } from 'types';
-
-const FILTER_MENU_TYPE = {
-  ALL: 'ALL',
-  TRUE: 'true',
-  FALSE: 'false',
-} as const;
 
 type KEY = keyof typeof FILTER_MENU_TYPE;
 
@@ -37,13 +32,13 @@ const StatusFilter = ({
 
   useEffect(() => {
     table.setColumnFilters([...filterState]);
-  }, [state]);
+  }, [filterState]);
 
   const onClickFilterHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name as (typeof FILTER_MENU_TYPE)[KEY];
-    name === FILTER_MENU_TYPE.ALL && setSearachParams(PARAMS.STATUS, 'ALL');
-    name === FILTER_MENU_TYPE.TRUE && setSearachParams(PARAMS.STATUS, 'true');
-    name === FILTER_MENU_TYPE.FALSE && setSearachParams(PARAMS.STATUS, 'false');
+    name === FILTER_MENU_TYPE.ALL && setSearachParams(STATUS, 'ALL');
+    name === FILTER_MENU_TYPE.TRUE && setSearachParams(STATUS, 'true');
+    name === FILTER_MENU_TYPE.FALSE && setSearachParams(STATUS, 'false');
     setFilteringValue(name);
   };
 

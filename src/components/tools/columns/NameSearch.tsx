@@ -5,7 +5,8 @@ import { HStack, IconButton, Input, Menu, MenuButton, MenuList } from '@chakra-u
 import { Table, Column, Header } from '@tanstack/react-table';
 
 import { Custom } from 'components/common';
-import useParamsFilter, { PARAMS } from 'hooks/useParamsFilter';
+import { CUSTOMER_NAME } from 'constant/paramsKey';
+import useParamsFilter from 'hooks/useParamsFilter';
 
 import type { DataResponse } from 'types';
 
@@ -18,10 +19,11 @@ const NameSearch = ({
   column: Column<any, unknown>;
   table: Table<DataResponse>;
 }) => {
-  const { state, filterState, updateState: setSearachParams } = useParamsFilter();
+  const { state, filterState, updateState: setSearachParams, resetState } = useParamsFilter();
   const [searchValue, setSearchValue] = useState(state.customer_name);
 
   useEffect(() => {
+    console.log(filterState);
     table.setColumnFilters(filterState);
   }, [state]);
 
@@ -32,14 +34,8 @@ const NameSearch = ({
 
   const searchBtnHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearachParams(PARAMS.CUSTOMER_NAME, searchValue);
+    setSearachParams(CUSTOMER_NAME, searchValue);
   };
-
-  const onFilterMackinit = () => {
-    setSearachParams(PARAMS.CUSTOMER_NAME, '');
-    setSearchValue('');
-  };
-
   return (
     <Menu closeOnSelect={false}>
       <Custom.TextBtn>
@@ -70,7 +66,6 @@ const NameSearch = ({
               onChange={e => setSearchValue(e.target.value)}
             />
             <Custom.OutlinBtn type='submit'>검색</Custom.OutlinBtn>
-            <Custom.OutlinBtn onClick={onFilterMackinit}>초기화</Custom.OutlinBtn>
           </HStack>
         </form>
       </MenuList>
