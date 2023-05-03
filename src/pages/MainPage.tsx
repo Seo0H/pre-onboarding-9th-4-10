@@ -17,16 +17,17 @@ const MainPage = () => {
 
   const columns = useColums();
   const table = useTableOptions({ data, columns });
-  const { filterState, reSeatStatae } = useParamsFilter();
+  const { filterState, resetState } = useParamsFilter();
 
   const onResetFilterUIHandler = () => {
     table.setColumnFilters(filterState);
-    reSeatStatae();
+    resetState();
     setIsFilterRest(true);
     setTimeout(() => setIsFilterRest(false), 1000);
   };
 
   useEffect(() => {
+    console.log(filterState);
     table.setColumnFilters(filterState);
   }, []);
 
